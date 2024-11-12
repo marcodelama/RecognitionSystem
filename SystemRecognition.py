@@ -21,7 +21,7 @@ def Sign():
     print("Formulario incompleto")
   else:
     #Validar usuarios
-    UserList = os.listdir(OutFolderPathUser)
+    UserList = os.listdir(OutFolderPathUser) #Lista de usuarios
 
 #Rutas
 OutFolderPathUser = 'C:/Users/usuario/Desktop/Marco/RecognitionSystem/Database/Users'
