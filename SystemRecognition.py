@@ -8,10 +8,25 @@ from PIL import Image, ImageTk
 import imutils
 import math
 
+def Log():
+  print("Hola Sing in")
+
+def Sign():
+  global RegName, RegUser, RegPassword, InputNameReg, InputUserReg, InputPasswordReg, cap, lblVideo, pantalla2
+  # Extracción de datos: Name - User - Password
+  RegName, RegUser, RegPassword = InputNameReg.get(), InputUserReg.get(), InputPasswordReg.get()
+
+  #Formulario incompleto
+  if len(RegName) == 0 or len(RegUser) == 0 or len(RegPassword) == 0:
+    print("Formulario incompleto")
+  else:
+    #Validar usuarios
+    UserList = os.listdir(OutFolderPathUser) #Lista de usuarios
+
 #Rutas
-OutFolderPathUser = 'C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimiento/DataBase/Users'
-PathUserCheck = 'C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimiento/DataBase/Users/'
-OutlFolderPathFace = 'C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimiento/DataBase/Faces'
+OutFolderPathUser = 'C:/Users/usuario/Desktop/Marco/RecognitionSystem/Database/Users'
+PathUserCheck = 'C:/Users/usuario/Desktop/Marco/RecognitionSystem/Database/Users/'
+OutlFolderPathFace = 'C:/Users/usuario/Desktop/Marco/RecognitionSystem/Database/Faces'
 
 #Lista de información
 info = []
@@ -22,7 +37,7 @@ pantalla.title("FACE RECOGNITION")
 pantalla.geometry("1280x720")
 
 #Fondo
-imagenF = PhotoImage(file='C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimiento/SetUp/Inicio.png')
+imagenF = PhotoImage(file='C:/Users/usuario/Desktop/Marco/RecognitionSystem/SetUp/Inicio.png')
 background = Label(image = imagenF, text="Inicio")
 background.place(x=0, y=0, relheight=1, relwidth=1)
 
@@ -42,5 +57,16 @@ InputUserLog.place(x=750, y=380)
 
 InputPasswordLog = Entry(pantalla)
 InputPasswordLog.place(x=750, y=500)
+
+#Botones
+#Registro
+imagenBR = PhotoImage(file='C:/Users/usuario/Desktop/Marco/RecognitionSystem/SetUp/BtLogin.png')
+BtReg = Button(pantalla, text="Registro", image=imagenBR,  height="40", width="200", command=Sign())
+BtReg.place(x=300, y=580)
+
+#Inicio
+imagenBI = PhotoImage(file='C:/Users/usuario/Desktop/Marco/RecognitionSystem/SetUp/BtSign.png')
+BtInicio = Button(pantalla, text="Registro", image=imagenBI,  height="40", width="200", command=Log())
+BtInicio.place(x=900, y=580)
 
 pantalla.mainloop()
