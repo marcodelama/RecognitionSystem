@@ -8,45 +8,6 @@ from PIL import Image, ImageTk
 import imutils
 import math
 
-def Profile():
-    global step, conteo, UserName, OutFolderPathUser
-
-    step = 0
-    conteo = 0
-
-    pantalla4 = Toplevel(pantalla)
-    pantalla4.title("PERFIL")
-    pantalla4.geometry("1280x720")
-
-    imagenBC = PhotoImage(file='C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimiento/SetUp/Back2.png')
-    bc = Button(image=imagenBC, text="Inicio")
-    bc.place(x=0, y=0, relwidth=1, relheight=1)
-
-    UserFile = open(f"{OutFolderPathUser}/{UserName}.txt", 'r')
-    InfoUser = UserFile.read().split(',')
-    Name = InfoUser[0]
-    User = InfoUser[1]
-    Pass = InfoUser[2]
-
-    if User in clases:
-        #Interfaz
-        texto1 = Label(pantalla4, text = f"BIENVENIDO {Name}")
-        texto1.place(x=580, y=50)
-
-        #Label
-        lblimage = Label(pantalla4)
-        lblimage.place(x=490, y=80)
-
-        #Imagen
-        ImgUser = cv2.imread(f"{OutFolderPathFace}/{User}.png")
-        ImgUser = cv2.cvtColor(ImgUser, cv2.COLOR_RGB2BGR)
-        ImgUser = Image.fromarray(ImgUser)
-
-        IMG = ImageTk.PhotoImage(image=ImgUser)
-
-        lblimage.configure(image=IMG)
-        lblimage.image = IMG
-
 def Code_Face(images):
     listacod = []
 
@@ -54,7 +15,12 @@ def Code_Face(images):
         # Correccion de color
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         # Codificamos la imagen
-        cod = fr.face_encodings(img)[0]
+        codificaciones = fr.face_encodings(img)
+        if len(codificaciones) > 0:
+            cod = codificaciones[0]
+            listacod.append(cod)
+        else:
+            print("Advertencia: No se detectó ningún rostro en la imagen.")
         # Almacenamos
         listacod.append(cod)
 
@@ -73,6 +39,51 @@ def Close_Window2():
     conteo = 0
     step = 0
     pantalla3.destroy()
+    
+def Profile():
+    global step, conteo, UserName, OutFolderPathUser
+
+    step = 0
+    conteo = 0
+
+    pantalla4 = Toplevel(pantalla)
+    pantalla4.title("PERFIL")
+    pantalla4.geometry("1280x720")
+
+    back = Label(pantalla4, image=imagenB, text="Back")
+    back.place(x=0, y=0, relwidth=1, relheight=1)
+
+    print("usuario", UserName)
+    UserFile = open(f"{OutFolderPathUser}/{UserName}.txt", 'r')
+    InfoUser = UserFile.read().split(',')
+    Name = InfoUser[0]
+    User = InfoUser[1]
+    Pass = InfoUser[2]
+
+    if User in clases:
+        #Interfaz
+        texto1 = Label(pantalla4, text = f"BIENVENIDO {Name}")
+        texto1.place(x=580, y=50)
+
+        #Label
+        lblimage = Label(pantalla4)
+        lblimage.place(x=490, y=80)
+
+        #Imagen
+        PosUserImg = clases.index(User)
+        UserImg = images[PosUserImg]
+
+        ImgUser = Image.fromarray(UserImg)
+
+        ImgUser = cv2.imread(f"{OutFolderPathFace}/{User}.png")
+        ImgUser = cv2.cvtColor(ImgUser, cv2.COLOR_RGB2BGR)
+        ImgUser = Image.fromarray(ImgUser)
+
+        IMG = ImageTk.PhotoImage(image=ImgUser)
+
+        lblimage.configure(image=IMG)
+        lblimage.image = IMG
+
 
 def Sign_Biometric():
     global pantalla, pantalla3, conteo, parpadeo, img_info, step, UserName, prueba
@@ -148,7 +159,7 @@ def Sign_Biometric():
 
                             if faces.detections is not None:    
                                 for face in faces.detections:
-
+                                    
                                     # bboxInfo - "id","bbox","score","center"
                                     score = face.score
                                     score = score[0]
@@ -182,20 +193,19 @@ def Sign_Biometric():
                                         if al < 0: al = 0
 
                                         if step == 0:
-                                            print("Rostro detectado")
                                             cv2.rectangle(frame, (xi, yi, an, al), (255, 0, 255), 2)
 
                                     #STEP 0
-                                            als0, ans0, c = img_step0.shape
-                                            frame[50:50 + als0, 50:50 + ans0] = img_step0
+                                            alis0, anis0, c = img_step0.shape
+                                            frame[50:50 + alis0, 50:50 + anis0] = img_step0
 
                                     #STEP 1
-                                            als1, ans1, c = img_step1.shape
-                                            frame[50:50 + als1, 1030:1030 + ans1] = img_step1
+                                            alis1, anis1, c = img_step1.shape
+                                            frame[50:50 + alis1, 1030:1030 + anis1] = img_step1
 
                                     #STEP 2
-                                            als2, ans2, c = img_step2.shape
-                                            frame[270:270 + als2, 1030:1030 + ans2] = img_step2
+                                            alis2, anis2, c = img_step2.shape
+                                            frame[270:270 + alis2, 1030:1030 + anis2] = img_step2
                                       
 
                                     #Requerimiento 1: Ver en dirección a la cámara
@@ -218,14 +228,15 @@ def Sign_Biometric():
 
                                         #Validación de parpadeos
                                                 if conteo >= 3:
-                                                    alch, anch, c = img_check.shape
-                                                    frame[385:385 + alch, 1105:1105 + anch] = img_check
+                                                    alich, anich, c = img_check.shape
+                                                    frame[385:385 + alich, 1105:1105 + anich] = img_check
 
                                             #Ojos abiertos
                                                     if longitud1 > 14 and longitud2 > 14:
-                                                        cut = frameSave[yi:yf, xi:xf]
+                                                        # cut = frameSave[yi:yf, xi:xf]
 
-                                                        cv2.imwrite(f"{OutFolderPathFace}/{RegUser}.png", cut)
+                                                        # cv2.imwrite(f"{OutFolderPathFace}/{RegUser}.png", cut)
+                                                        print("HOLA, PROBANDO")
 
                                                         step = 1
                                             else:
@@ -254,7 +265,6 @@ def Sign_Biometric():
 
                                                 if Match[min]:
                                                     UserName = clases[min].upper()
-
                                                     Profile()
 
                             # close = pantalla3.protocol("WM_DELETE_WINDOW", Close_Window2())
@@ -444,8 +454,6 @@ def Log_Biometric():
 def Sign():
     global LogUser, LogPass, OutFolderPath, cap, lblVideo, pantalla3, FaceCode, clases, images
 
-    LogUser, LogPass = InputUserLog.get(), InputPasswordLog.get()
-
     images = []
     clases = []
     lista = os.listdir(OutFolderPathFace)
@@ -463,6 +471,9 @@ def Sign():
     pantalla3 = Toplevel(pantalla)
     pantalla3.title("BIOMETRIC SIGN UP")
     pantalla3.geometry("1280x720")
+
+    back2 = Label(pantalla3, image=imagenB, text="Back")
+    back2.place(x=0, y=0, relwidth=1, relheight=1)
 
     lblVideo = Label(pantalla3)
     lblVideo.place(x=0, y=0)
@@ -536,6 +547,7 @@ img_step1 = cv2.imread("C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimiento
 img_step2 = cv2.imread("C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimiento/SetUp/Step2.png")
 img_liveness_check = cv2.imread("C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimiento/SetUp/LivenessCheck.png")
 
+
 #Variables
 parpadeo = False
 conteo = 0 
@@ -593,9 +605,11 @@ imagenBR = PhotoImage(file='C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimi
 BtReg = Button(pantalla, text="Registro", image=imagenBR,  height="40", width="200", command=Log)
 BtReg.place(x=300, y=580)
 
+imagenB = PhotoImage(file="C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimiento/SetUp/Back2.png")
+
 #Inicio
 imagenBI = PhotoImage(file='C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimiento/SetUp/BtSign.png')
 BtInicio = Button(pantalla, text="Registro", image=imagenBI,  height="40", width="200", command=Sign)
-BtInicio.place(x=900, y=580)
+BtInicio.place(x=850, y=580)
 
 pantalla.mainloop()
