@@ -12,17 +12,16 @@ def Code_Face(images):
     listacod = []
 
     for img in images:
-        # Correccion de color
+        # Corrección de color
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        # Codificamos la imagen
-        codificaciones = fr.face_encodings(img)
-        if len(codificaciones) > 0:
-            cod = codificaciones[0]
-            listacod.append(cod)
+
+        # Codificar la imagen (puede haber múltiples rostros)
+        cod = fr.face_encodings(img)
+        
+        if cod:  # Solo si se genera una codificación
+            listacod.append(cod[0])  # Toma solo el primer rostro
         else:
-            print("Advertencia: No se detectó ningún rostro en la imagen.")
-        # Almacenamos
-        listacod.append(cod)
+            print("No se encontró ningún rostro en la imagen.")
 
     return listacod
 
@@ -43,8 +42,8 @@ def Close_Window2():
 def Profile():
     global step, conteo, UserName, OutFolderPathUser
 
-    step = 0
     conteo = 0
+    step = 0
 
     pantalla4 = Toplevel(pantalla)
     pantalla4.title("PERFIL")
@@ -53,16 +52,20 @@ def Profile():
     back = Label(pantalla4, image=imagenB, text="Back")
     back.place(x=0, y=0, relwidth=1, relheight=1)
 
-    print("usuario", UserName)
     UserFile = open(f"{OutFolderPathUser}/{UserName}.txt", 'r')
-    InfoUser = UserFile.read().split(',')
+    InfoUser = UserFile.read().split(', ')
+    
     Name = InfoUser[0]
     User = InfoUser[1]
     Pass = InfoUser[2]
 
+    UserFile.close()
+
     if User in clases:
+
         #Interfaz
         texto1 = Label(pantalla4, text = f"BIENVENIDO {Name}")
+        
         texto1.place(x=580, y=50)
 
         #Label
@@ -233,17 +236,11 @@ def Sign_Biometric():
 
                                             #Ojos abiertos
                                                     if longitud1 > 14 and longitud2 > 14:
-                                                        # cut = frameSave[yi:yf, xi:xf]
-
-                                                        # cv2.imwrite(f"{OutFolderPathFace}/{RegUser}.png", cut)
-                                                        print("HOLA, PROBANDO")
-
                                                         step = 1
                                             else:
                                                 conteo = 0
 
                                         if step == 1:
-                                            
                                             cv2.rectangle(frame, (xi, yi, an, al), (255, 0, 255), 2)
 
                                             alli, anli, c = img_liveness_check.shape
@@ -254,18 +251,22 @@ def Sign_Biometric():
                                             facescod = fr.face_encodings(rgb, faces)
 
                                             for facecod, faceloc in zip(facescod, faces):
-                                        #Matching
+    # Obtener distancias y coincidencias
                                                 Match = fr.compare_faces(FaceCode, facecod)
-
-                                        #Similitud
                                                 simi = fr.face_distance(FaceCode, facecod)
-
-                                        #Min
-                                                min = np.argmin(simi)
-
-                                                if Match[min]:
-                                                    UserName = clases[min].upper()
+    
+    # Índice de la menor distancia
+                                                min_index = np.argmin(simi)
+                                                print("clases", clases)
+                                                print("similitud", min_index)
+                                                print("Match", Match)
+    # Verificar si la coincidencia cumple el umbral
+                                                if Match[min_index] and simi[min_index] < 0.8: # Ajusta el umbral según tu modelo
+                                                    print(f"FaceCode: {len(FaceCode)}, Clases: {len(clases)}")
+                                                    UserName = clases[min_index].upper()
                                                     Profile()
+                                                else:
+                                                    print("Usuario no reconocido o baja similitud.")
 
                             # close = pantalla3.protocol("WM_DELETE_WINDOW", Close_Window2())
 
