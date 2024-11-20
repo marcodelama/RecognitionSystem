@@ -87,6 +87,49 @@ def Profile():
         lblimage.configure(image=IMG)
         lblimage.image = IMG
 
+usuario_no_reconocido_mostrado = False
+
+def NoReconocido():
+    global usuario_no_reconocido_mostrado
+    
+    # Evita mostrar múltiples ventanas si ya se ha mostrado una
+    if not usuario_no_reconocido_mostrado:
+        usuario_no_reconocido_mostrado = True
+
+        # Crear la ventana principal
+        pantalla5 = Toplevel(pantalla)
+        pantalla5.title("Usuario No Reconocido")
+        pantalla5.geometry("300x200")
+        pantalla5.configure(bg="white")
+
+        # Etiqueta de mensaje
+        texto = Label(
+            pantalla5,
+            text="Usuario no reconocido o baja similitud.",
+            font=("Arial", 12),
+            bg="white",
+            fg="red",
+            wraplength=250,
+            justify="center"
+        )
+        texto.place(x=25, y=50)
+
+        # Botón para cerrar la ventana
+        btn_cerrar = Button(
+            pantalla5,
+            text="Cerrar",
+            font=("Arial", 10),
+            bg="#f44336",
+            fg="white",
+            command=lambda: reset_no_reconocido(pantalla5)
+        )
+        btn_cerrar.place(x=115, y=120)
+
+def reset_no_reconocido(ventana):
+    """Reinicia la bandera cuando se cierra la ventana"""
+    global usuario_no_reconocido_mostrado
+    usuario_no_reconocido_mostrado = False
+    ventana.destroy()
 
 def Sign_Biometric():
     global pantalla, pantalla3, conteo, parpadeo, img_info, step, UserName, prueba
@@ -267,6 +310,7 @@ def Sign_Biometric():
                                                     Profile()
                                                 else:
                                                     print("Usuario no reconocido o baja similitud.")
+                                                    NoReconocido()
 
                             # close = pantalla3.protocol("WM_DELETE_WINDOW", Close_Window2())
 
