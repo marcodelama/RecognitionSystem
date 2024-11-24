@@ -580,17 +580,17 @@ def Log():
       Log_Biometric()
 
 #Rutas
-OutFolderPathUser = 'C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimiento/DataBase/Users'
-PathUserCheck = 'C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimiento/DataBase/Users/'
-OutFolderPathFace = 'C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimiento/DataBase/Faces'
+OutFolderPathUser = 'C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimientoUNI/DataBase/Users'
+PathUserCheck = 'C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimientoUNI/DataBase/Users/'
+OutFolderPathFace = 'C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimientoUNI/DataBase/Faces'
 
 #Lectura de imágenes
-img_info = cv2.imread("C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimiento/SetUp/Info.png")
-img_check = cv2.imread("C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimiento/SetUp/check.png")
-img_step0 = cv2.imread("C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimiento/SetUp/Step0.png")
-img_step1 = cv2.imread("C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimiento/SetUp/Step1.png")
-img_step2 = cv2.imread("C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimiento/SetUp/Step2.png")
-img_liveness_check = cv2.imread("C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimiento/SetUp/LivenessCheck.png")
+img_info = cv2.imread("C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimientoUNI/SetUp/Info.png")
+img_check = cv2.imread("C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimientoUNI/SetUp/check.png")
+img_step0 = cv2.imread("C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimientoUNI/SetUp/Step0.png")
+img_step1 = cv2.imread("C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimientoUNI/SetUp/Step1.png")
+img_step2 = cv2.imread("C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimientoUNI/SetUp/Step2.png")
+img_liveness_check = cv2.imread("C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimientoUNI/SetUp/LivenessCheck.png")
 
 
 #Variables
@@ -623,7 +623,7 @@ pantalla.title("FACE RECOGNITION")
 pantalla.geometry("1280x720")
 
 #Fondo
-imagenF = PhotoImage(file='C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimiento/SetUp/Inicio.png')
+imagenF = PhotoImage(file='C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimientoUNI/SetUp/Inicio.png')
 background = Label(image = imagenF, text="Inicio")
 background.place(x=0, y=0, relheight=1, relwidth=1)
 
@@ -646,14 +646,14 @@ InputPasswordLog.place(x=750, y=500)
 
 #Botones
 #Registro
-imagenBR = PhotoImage(file='C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimiento/SetUp/BtLogin.png')
+imagenBR = PhotoImage(file='C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimientoUNI/SetUp/BtLogin.png')
 BtReg = Button(pantalla, text="Registro", image=imagenBR,  height="40", width="200", command=Log)
 BtReg.place(x=300, y=580)
 
-imagenB = PhotoImage(file="C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimiento/SetUp/Back2.png")
+imagenB = PhotoImage(file="C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimientoUNI/SetUp/Back2.png")
 
 #Inicio
-imagenBI = PhotoImage(file='C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimiento/SetUp/BtSign.png')
+imagenBI = PhotoImage(file='C:/Users/mbarr/OneDrive/Escritorio/SistemaReconocimientoUNI/SetUp/BtSign.png')
 BtInicio = Button(pantalla, text="Registro", image=imagenBI,  height="40", width="200", command=Sign)
 BtInicio.place(x=850, y=580)
 
